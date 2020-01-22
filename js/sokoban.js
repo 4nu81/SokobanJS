@@ -8,18 +8,29 @@ const KEYRIGHT = 39;
 const KEYUP = 38;
 const KEYDOWN = 40;
 
+const WALLCOLOR = "magenta";
+const BOXCOLOR = "lime";
+const PLAYERCOLOR = "red";
 
-var player = {x: 0, y: 0, move: true, color: "red"}
+var player = {x: 1, y: 1, move: true, color: PLAYERCOLOR}
 
 var boxes = [
-    {x:3, y:3, move: true, color: "lime"},
-    {x:3, y:4, move: true, color: "lime"},
+    {x:3, y:3, move: true, color: BOXCOLOR},
+    {x:3, y:4, move: true, color: BOXCOLOR},
 ]
 
 var walls = [
-    {x:5, y:3, move: false, color: "magenta"},
-    {x:5, y:4, move: false, color: "magenta"},
+    {x:5, y:3, move: false, color: WALLCOLOR},
+    {x:5, y:4, move: false, color: WALLCOLOR},
 ]
+for (var i = 0; i<gameWidth;i++) {
+    walls.push({x:i, y:0, move:false, color: WALLCOLOR});
+    walls.push({x:i, y: gameHeight - 1, move:false, color: WALLCOLOR});
+}
+for (var i = 1; i < gameHeight - 1; i++) {
+    walls.push({x:0, y:i, move:false, color: WALLCOLOR});
+    walls.push({x:gameWidth-1, y:i, move:false, color: WALLCOLOR});
+}
 
 var targets = [
     {x:7, y:3, done:false},
@@ -59,11 +70,13 @@ function drawGame() {
 function moveObj(obj ,dx, dy) {
     move = obj.move;
     for (box of boxes){
+        if (move == false) break;
         if (box != obj && box.x == obj.x + dx && box.y == obj.y +dy ){
             move = moveObj(box, dx, dy);
         }
     }
     for (wall of walls) {
+        if (move == false) break;
         if (wall.x == obj.x + dx && wall.y == obj.y + dy) {
             move = false;
         }
